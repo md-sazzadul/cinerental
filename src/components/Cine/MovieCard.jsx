@@ -9,7 +9,7 @@ const MovieCard = ({ movie }) => {
   const [showModal, setShowModal] = useState(false);
   const [selectedMovie, setSelectedMovie] = useState(null);
 
-  const { state, dispatch } = useContext(MovieContext);
+  const { state, dispatch, watchlist, setWatchlist } = useContext(MovieContext);
 
   function handleModalClose() {
     setSelectedMovie(null);
@@ -41,6 +41,26 @@ const MovieCard = ({ movie }) => {
       });
     } else {
       toast.error(`Movie ${movie.title} has been added to the cart already!`, {
+        position: "bottom-right",
+      });
+    }
+  }
+
+  function handleAddToWatchlist(event, movie) {
+    event.stopPropagation();
+
+    const found = watchlist.find((item) => {
+      return item.id === movie.id;
+    });
+
+    if (!found) {
+      setWatchlist((prevWatchlist) => [...prevWatchlist, movie]);
+
+      toast.success(`Movie ${movie.title} added to watchlist`, {
+        position: "bottom-right",
+      });
+    } else {
+      toast.error(`Movie ${movie.title} is already in the watchlist!`, {
         position: "bottom-right",
       });
     }
@@ -78,6 +98,14 @@ const MovieCard = ({ movie }) => {
             >
               <img src="./assets/tag.svg" alt="" />
               <span>${movie.price} | Add to Cart</span>
+            </button>
+            <button
+              className="ml-2 bg-secondary rounded-lg py-2 px-5 flex items-center justify-center gap-2 text-[#171923] font-semibold text-sm"
+              href="#"
+              onClick={(e) => handleAddToWatchlist(e, movie)}
+            >
+              <img src="./assets/heart.svg" alt="" />
+              <span>Add to Watchlist</span>
             </button>
           </figcaption>
         </a>

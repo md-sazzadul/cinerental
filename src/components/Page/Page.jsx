@@ -1,6 +1,8 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
+import { Route, Routes } from "react-router-dom";
 import { ThemeContext } from "../../context";
 import MovieList from "../Cine/MovieList";
+import Watchlist from "../Cine/Watchlist";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import SearchBar from "../SearchBar/SearchBar";
@@ -15,8 +17,18 @@ const Page = () => {
         <div className="container grid lg:grid-cols-[218px_1fr] gap-[3.5rem]">
           <Sidebar></Sidebar>
           <div>
-            <SearchBar />
-            <MovieList></MovieList>
+            <Routes>
+              <Route
+                path="/"
+                element={
+                  <>
+                    <SearchBar />
+                    <MovieList />
+                  </>
+                }
+              />
+              <Route path="/watchlist" element={<Watchlist />} />
+            </Routes>
           </div>
         </div>
       </main>

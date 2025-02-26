@@ -8,6 +8,7 @@ const MovieProvider = ({ children }) => {
   const [movies, setMovies] = useState([]);
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [watchlist, setWatchlist] = useState([]);
 
   const [state, dispatch] = useReducer(cartReducer, initialState);
 
@@ -34,7 +35,14 @@ const MovieProvider = ({ children }) => {
 
   return (
     <MovieContext.Provider
-      value={{ filteredMovies, setSearchTerm, state, dispatch }}
+      value={{
+        filteredMovies,
+        setSearchTerm,
+        state,
+        dispatch,
+        watchlist,
+        setWatchlist,
+      }}
     >
       {children}
     </MovieContext.Provider>

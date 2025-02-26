@@ -1,4 +1,4 @@
-import React from "react";
+import { Link } from "react-router-dom";
 import comingSoon from "../../assets/icons/commingSoon.svg";
 import favourite from "../../assets/icons/favourite.svg";
 import newRelease from "../../assets/icons/newRelease.svg";
@@ -10,49 +10,49 @@ const Sidebar = () => {
     <aside>
       <ul className="space-y-2">
         <li>
-          <a
+          <Link
             className="flex items-center space-x-2 px-5 py-3.5 rounded-lg bg-primary text-black"
-            href="#"
+            to="/"
           >
             <img src={trending} width="24" height="24" alt="trending" />
             <span>Trending</span>
-          </a>
+          </Link>
         </li>
         <li>
-          <a
+          <Link
             className="flex items-center space-x-2 px-5 py-3.5 rounded-lg"
-            href="#"
+            to="/new-releases"
           >
             <img src={newRelease} width="24" height="24" alt="newRelease" />
             <span>New Releases</span>
-          </a>
+          </Link>
         </li>
         <li>
-          <a
+          <Link
             className="flex items-center space-x-2 px-5 py-3.5 rounded-lg"
-            href="#"
+            to="/coming-soon"
           >
             <img src={comingSoon} width="24" height="24" alt="comingSoon" />
             <span>Coming Soon</span>
-          </a>
+          </Link>
         </li>
         <li>
-          <a
+          <Link
             className="flex items-center space-x-2 px-5 py-3.5 rounded-lg"
-            href="#"
+            to="/favourites"
           >
             <img src={favourite} width="24" height="24" alt="favourite" />
             <span>Favourites</span>
-          </a>
+          </Link>
         </li>
         <li>
-          <a
+          <Link
             className="flex items-center space-x-2 px-5 py-3.5 rounded-lg"
-            href="#"
+            to="/watchlist"
           >
             <img src={watchLater} width="24" height="24" alt="watchLater" />
             <span>Watch Later</span>
-          </a>
+          </Link>
         </li>
       </ul>
     </aside>
