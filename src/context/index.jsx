@@ -9,6 +9,8 @@ const MovieProvider = ({ children }) => {
   const [filteredMovies, setFilteredMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [watchlist, setWatchlist] = useState([]);
+  const [sortCriteria, setSortCriteria] = useState("title");
+  const [selectedGenre, setSelectedGenre] = useState("");
 
   const [state, dispatch] = useReducer(cartReducer, initialState);
 
@@ -19,19 +21,37 @@ const MovieProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    let filtered = movies;
+
     if (searchTerm) {
-      const filtered = movies.filter(
+      filtered = filtered.filter(
         (movie) =>
           movie.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
           movie.genre.toLowerCase().includes(searchTerm.toLowerCase()) ||
           movie.rating.toString().includes(searchTerm)
       );
-
-      setFilteredMovies(filtered);
-    } else {
-      setFilteredMovies(movies);
     }
-  }, [searchTerm, movies]);
+
+    if (selectedGenre) {
+      filtered = filtered.filter((movie) =>
+        movie.genre.toLowerCase().includes(selectedGenre.toLowerCase())
+      );
+    }
+
+    switch (sortCriteria) {
+      case "price":
+        filtered = filtered.sort((a, b) => a.price - b.price);
+        break;
+      case "rating":
+        filtered = filtered.sort((a, b) => b.rating - a.rating);
+        break;
+      default:
+        filtered = filtered.sort((a, b) => a.title.localeCompare(b.title));
+        break;
+    }
+
+    setFilteredMovies(filtered);
+  }, [searchTerm, movies, sortCriteria, selectedGenre]);
 
   return (
     <MovieContext.Provider
@@ -42,6 +62,8 @@ const MovieProvider = ({ children }) => {
         dispatch,
         watchlist,
         setWatchlist,
+        setSortCriteria,
+        selectedGenre,
       }}
     >
       {children}

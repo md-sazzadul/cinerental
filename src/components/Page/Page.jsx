@@ -1,6 +1,7 @@
 import { useContext } from "react";
 import { Route, Routes } from "react-router-dom";
 import { ThemeContext } from "../../context";
+import FilterSortOptions from "../Cine/FilterSortOptions";
 import MovieList from "../Cine/MovieList";
 import Watchlist from "../Cine/Watchlist";
 import Footer from "../Footer/Footer";
@@ -10,12 +11,13 @@ import Sidebar from "../Sidebar/Sidebar";
 
 const Page = () => {
   const { darkMode } = useContext(ThemeContext);
+
   return (
     <div className={`h-full ${darkMode ? "dark" : ""}`}>
       <Header></Header>
       <main>
         <div className="container grid lg:grid-cols-[218px_1fr] gap-[3.5rem]">
-          <Sidebar></Sidebar>
+          <Sidebar />
           <div>
             <Routes>
               <Route
@@ -23,6 +25,7 @@ const Page = () => {
                 element={
                   <>
                     <SearchBar />
+                    <FilterSortOptions />
                     <MovieList />
                   </>
                 }
@@ -32,7 +35,7 @@ const Page = () => {
           </div>
         </div>
       </main>
-      <Footer></Footer>
+      <Footer />
     </div>
   );
 };
