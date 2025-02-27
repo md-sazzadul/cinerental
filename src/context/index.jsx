@@ -1,4 +1,4 @@
-import { createContext, useEffect, useReducer, useState } from "react";
+import { createContext, useEffect, useMemo, useReducer, useState } from "react";
 import { getAllMovies } from "../data/movies";
 import { cartReducer, initialState } from "../reducers/CartReducer";
 
@@ -6,21 +6,26 @@ const MovieContext = createContext();
 
 const MovieProvider = ({ children }) => {
   const [movies, setMovies] = useState([]);
-  const [filteredMovies, setFilteredMovies] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [watchlist, setWatchlist] = useState([]);
   const [sortCriteria, setSortCriteria] = useState("title");
   const [selectedGenre, setSelectedGenre] = useState("");
+
+  const [watchlist, setWatchlist] = useState(() => {
+    return JSON.parse(localStorage.getItem("watchlist")) || [];
+  });
+
+  useEffect(() => {
+    localStorage.setItem("watchlist", JSON.stringify(watchlist));
+  }, [watchlist]);
 
   const [state, dispatch] = useReducer(cartReducer, initialState);
 
   useEffect(() => {
     const allMovies = getAllMovies();
     setMovies(allMovies);
-    setFilteredMovies(allMovies);
   }, []);
 
-  useEffect(() => {
+  const filteredMovies = useMemo(() => {
     let filtered = movies;
 
     if (searchTerm) {
@@ -38,19 +43,16 @@ const MovieProvider = ({ children }) => {
       );
     }
 
-    switch (sortCriteria) {
-      case "price":
-        filtered = filtered.sort((a, b) => a.price - b.price);
-        break;
-      case "rating":
-        filtered = filtered.sort((a, b) => b.rating - a.rating);
-        break;
-      default:
-        filtered = filtered.sort((a, b) => a.title.localeCompare(b.title));
-        break;
-    }
-
-    setFilteredMovies(filtered);
+    return [...filtered].sort((a, b) => {
+      switch (sortCriteria) {
+        case "price":
+          return a.price - b.price;
+        case "rating":
+          return b.rating - a.rating;
+        default:
+          return a.title.localeCompare(b.title);
+      }
+    });
   }, [searchTerm, movies, sortCriteria, selectedGenre]);
 
   return (
@@ -71,6 +73,6 @@ const MovieProvider = ({ children }) => {
   );
 };
 
-const ThemeContext = createContext();
+const ThemeContext = createContext({ darkMode: true, setDarkMode: () => {} });
 
 export { MovieContext, MovieProvider, ThemeContext };
