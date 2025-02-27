@@ -1,5 +1,6 @@
-import React from "react";
 import { getImgUrl } from "../../utils/cine-utility";
+import ReviewForm from "../Reviews/ReviewForm";
+import ReviewList from "../Reviews/ReviewList";
 
 const MovieDetailsModal = ({ movie, onClose, onCartAdd }) => {
   return (
@@ -24,6 +25,8 @@ const MovieDetailsModal = ({ movie, onClose, onCartAdd }) => {
             <p className="text-sm lg:text-base mb-8 lg:mb-16">
               {movie.description}
             </p>
+            <ReviewList movieId={movie.id} />
+            <ReviewForm movieId={movie.id} />
             <div className="grid lg:grid-cols-2 gap-2">
               <a
                 className="bg-primary rounded-lg py-2 px-5 flex items-center justify-center gap-2 text-[#171923] font-semibold text-sm"

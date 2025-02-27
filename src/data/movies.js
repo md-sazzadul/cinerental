@@ -8,6 +8,7 @@ const data = [
     genre: "Comedy/Drama",
     rating: 5,
     price: 140,
+    reviews: [],
   },
   {
     id: crypto.randomUUID(),
@@ -18,6 +19,7 @@ const data = [
     genre: "Comedy/Drama",
     rating: 3,
     price: 90,
+    reviews: [],
   },
   {
     id: crypto.randomUUID(),
@@ -28,6 +30,7 @@ const data = [
     genre: "Action/Comedy/Crime/Drama",
     rating: 4,
     price: 100,
+    reviews: [],
   },
   {
     id: crypto.randomUUID(),
@@ -38,6 +41,7 @@ const data = [
     genre: "Comedy, Drama, Thriller",
     rating: 4,
     price: 250,
+    reviews: [],
   },
   {
     id: crypto.randomUUID(),
@@ -48,6 +52,7 @@ const data = [
     genre: "Action/Adventure/Sci-fi",
     rating: 5,
     price: 100,
+    reviews: [],
   },
   {
     id: crypto.randomUUID(),
@@ -58,6 +63,7 @@ const data = [
     genre: "Adventure/Drama/Sci-Fi",
     rating: 5,
     price: 150,
+    reviews: [],
   },
   {
     id: crypto.randomUUID(),
@@ -68,6 +74,7 @@ const data = [
     genre: "Action/Crime/Drama",
     rating: 5,
     price: 120,
+    reviews: [],
   },
   {
     id: crypto.randomUUID(),
@@ -78,6 +85,7 @@ const data = [
     genre: "Action/Adventure/Sci-Fi",
     rating: 4,
     price: 130,
+    reviews: [],
   },
   {
     id: crypto.randomUUID(),
@@ -88,6 +96,7 @@ const data = [
     genre: "Crime/Drama/Thriller",
     rating: 4,
     price: 110,
+    reviews: [],
   },
   {
     id: crypto.randomUUID(),
@@ -98,6 +107,7 @@ const data = [
     genre: "Action/Adventure/Drama",
     rating: 5,
     price: 200,
+    reviews: [],
   },
   {
     id: crypto.randomUUID(),
@@ -108,6 +118,7 @@ const data = [
     genre: "Action/Biography/Drama",
     rating: 4,
     price: 140,
+    reviews: [],
   },
   {
     id: crypto.randomUUID(),
@@ -118,6 +129,7 @@ const data = [
     genre: "Action/Adventure/Sci-Fi",
     rating: 4,
     price: 120,
+    reviews: [],
   },
   {
     id: crypto.randomUUID(),
@@ -128,6 +140,7 @@ const data = [
     genre: "Animation/Adventure/Drama",
     rating: 5,
     price: 80,
+    reviews: [],
   },
   {
     id: crypto.randomUUID(),
@@ -138,6 +151,7 @@ const data = [
     genre: "Animation/Adventure/Comedy",
     rating: 4,
     price: 90,
+    reviews: [],
   },
   {
     id: crypto.randomUUID(),
@@ -148,6 +162,7 @@ const data = [
     genre: "Animation/Adventure/Comedy",
     rating: 4,
     price: 100,
+    reviews: [],
   },
   {
     id: crypto.randomUUID(),
@@ -158,6 +173,7 @@ const data = [
     genre: "Action/Adventure/Sci-Fi",
     rating: 5,
     price: 140,
+    reviews: [],
   },
 ];
 

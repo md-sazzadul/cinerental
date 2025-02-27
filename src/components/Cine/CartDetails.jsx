@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import { useContext } from "react";
 import { toast } from "react-toastify";
 import Delete from "../../assets/delete.svg";
 import checkout from "../../assets/icons/checkout.svg";
