@@ -10,6 +10,9 @@ export default {
       },
       colors: {
         primary: "#00D991",
+        secondary: "#FF7A00",
+        accent: "#FF4081",
+        background: "#F8F9FA",
       },
     },
   },
