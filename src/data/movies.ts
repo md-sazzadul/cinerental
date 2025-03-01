@@ -1,4 +1,15 @@
-const data = [
+interface Movie {
+  id: string;
+  cover: string;
+  title: string;
+  description: string;
+  genre: string;
+  rating: number;
+  price: number;
+  reviews: string[];
+}
+
+const data: Movie[] = [
   {
     id: crypto.randomUUID(),
     cover: "once-in-ho.jpg",
@@ -48,7 +59,7 @@ const data = [
     cover: "iron-man.png",
     title: "Iron Man",
     description:
-      "When Branch’s brother, Floyd, is kidnapped for his musical talents by a pair of nefarious pop-star villains, Branch and Poppy embark on a harrowing and emotional journey to reunite the other brothers and rescue Floyd from a fate even worse than pop-culture obscurity.",
+      "A billionaire industrialist and genius inventor, Tony Stark (Robert Downey Jr.), is conducting weapons tests overseas, but terrorists kidnap him to force him to build a devastating weapon.",
     genre: "Action/Adventure/Sci-fi",
     rating: 5,
     price: 100,
@@ -177,8 +188,8 @@ const data = [
   },
 ];
 
-function getAllMovies() {
+function getAllMovies(): Movie[] {
   return data;
 }
 
-export { getAllMovies };
+export { getAllMovies, Movie };
