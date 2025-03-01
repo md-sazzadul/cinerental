@@ -4,18 +4,14 @@ import "react-toastify/dist/ReactToastify.css";
 import Page from "./components/Page/Page";
 import { MovieProvider, ThemeContext } from "./context";
 
-function App() {
-  const [darkMode, setDarkMode] = useState(() => {
-    return localStorage.getItem("darkMode") === "true";
-  });
+const App: React.FC = () => {
+  const [darkMode, setDarkMode] = useState<boolean>(
+    () => localStorage.getItem("darkMode") === "true"
+  );
 
   useEffect(() => {
-    localStorage.setItem("darkMode", darkMode);
-    if (darkMode) {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    document.documentElement.classList.toggle("dark", darkMode);
+    localStorage.setItem("darkMode", JSON.stringify(darkMode));
   }, [darkMode]);
 
   return (
@@ -26,6 +22,6 @@ function App() {
       </MovieProvider>
     </ThemeContext.Provider>
   );
-}
+};
 
 export default App;
