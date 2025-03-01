@@ -2,15 +2,37 @@ import { createContext, useEffect, useMemo, useReducer, useState } from "react";
 import { getAllMovies } from "../data/movies";
 import { cartReducer, initialState } from "../reducers/CartReducer";
 
-const MovieContext = createContext();
+interface Movie {
+  id: number;
+  title: string;
+  genre: string;
+  rating: number;
+  price: number;
+}
 
-const MovieProvider = ({ children }) => {
-  const [movies, setMovies] = useState([]);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortCriteria, setSortCriteria] = useState("title");
-  const [selectedGenre, setSelectedGenre] = useState("");
+interface MovieContextType {
+  filteredMovies: Movie[];
+  setSearchTerm: (term: string) => void;
+  state: typeof initialState;
+  dispatch: React.Dispatch<any>;
+  watchlist: Movie[];
+  setWatchlist: React.Dispatch<React.setStateAction<Movie[]>>;
+  setSortCriteria: (criteria: string) => void;
+  selectedGenre: string;
+  setSelectedGenre: (genre: string) => void;
+}
 
-  const [watchlist, setWatchlist] = useState(() => {
+const MovieContext = createContext<MovieContextType | undefined>(undefined);
+
+const MovieProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [sortCriteria, setSortCriteria] = useState<string>("title");
+  const [selectedGenre, setSelectedGenre] = useState<string>("");
+
+  const [watchlist, setWatchlist] = useState<Movie[]>(() => {
     return JSON.parse(localStorage.getItem("watchlist")) || [];
   });
 
@@ -66,6 +88,7 @@ const MovieProvider = ({ children }) => {
         setWatchlist,
         setSortCriteria,
         selectedGenre,
+        setSelectedGenre,
       }}
     >
       {children}
@@ -73,6 +96,14 @@ const MovieProvider = ({ children }) => {
   );
 };
 
-const ThemeContext = createContext({ darkMode: true, setDarkMode: () => {} });
+interface ThemeContextType {
+  darkMode: boolean;
+  setDarkMode: (mode: boolean) => void;
+}
+
+const ThemeContext = createContext<ThemeContextType>({
+  darkMode: true,
+  setDarkMode: () => {},
+});
 
 export { MovieContext, MovieProvider, ThemeContext };
