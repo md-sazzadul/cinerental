@@ -6,7 +6,13 @@ import App from "./App";
 import { ReviewsProvider } from "./context/ReviewsContext";
 import "./index.css";
 
-ReactDOM.createRoot(document.getElementById("root")).render(
+const rootElement = document.getElementById("root");
+
+if (!rootElement) {
+  throw new Error("Root element not found");
+}
+
+ReactDOM.createRoot(rootElement as HTMLElement).render(
   <React.StrictMode>
     <Router>
       <ReviewsProvider>
