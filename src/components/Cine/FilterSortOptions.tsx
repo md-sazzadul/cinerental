@@ -1,15 +1,14 @@
-// src/components/Cine/FilterSortOptions.jsx
-import { useContext } from "react";
+import { ChangeEvent, useContext } from "react";
 import { MovieContext } from "../../context";
 
-const FilterSortOptions = () => {
+const FilterSortOptions: React.FC = () => {
   const { setSortCriteria, setSelectedGenre } = useContext(MovieContext);
 
-  const handleSortChange = (event) => {
+  const handleSortChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setSortCriteria(event.target.value);
   };
 
-  const handleGenreChange = (event) => {
+  const handleGenreChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setSelectedGenre(event.target.value);
   };
 
@@ -29,6 +28,7 @@ const FilterSortOptions = () => {
           <option value="rating">Rating</option>
         </select>
       </div>
+
       <div className="flex flex-col">
         <label htmlFor="genre" className="mb-2 text-sm font-semibold">
           Filter By Genre:
