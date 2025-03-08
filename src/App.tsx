@@ -5,13 +5,26 @@ import Page from "./components/Page/Page";
 import { MovieProvider, ThemeContext } from "./context";
 
 const App: React.FC = () => {
-  const [darkMode, setDarkMode] = useState<boolean>(
-    () => localStorage.getItem("darkMode") === "true"
-  );
+  const [darkMode, setDarkMode] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem("darkMode") === "true";
+    } catch (error) {
+      console.error("Error accessing localStorage:", error);
+      return false;
+    }
+  });
 
   useEffect(() => {
-    document.documentElement.classList.toggle("dark", darkMode);
-    localStorage.setItem("darkMode", JSON.stringify(darkMode));
+    const debounceTimeout = setTimeout(() => {
+      try {
+        document.documentElement.classList.toggle("dark", darkMode);
+        localStorage.setItem("darkMode", JSON.stringify(darkMode));
+      } catch (error) {
+        console.error("Error updating dark mode settings:", error);
+      }
+    }, 300); // Debounce for 300ms
+
+    return () => clearTimeout(debounceTimeout); // Cleanup
   }, [darkMode]);
 
   return (
