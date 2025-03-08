@@ -1,4 +1,11 @@
-import { createContext, useEffect, useMemo, useReducer, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useReducer,
+  useState,
+} from "react";
 import { getAllMovies } from "../data/movies";
 import {
   CartActionType,
@@ -36,26 +43,27 @@ const MovieProvider: React.FC<{ children: React.ReactNode }> = ({
   const [sortCriteria, setSortCriteria] = useState<string>("title");
   const [selectedGenre, setSelectedGenre] = useState<string>("");
 
-  const [watchlist, setWatchlist] = useState<Movie[]>(() => {
+  const [watchlist, setWatchlist] = useState<Movie[]>([]);
+
+  // Load watchlist from localStorage on mount
+  useEffect(() => {
     try {
-      return JSON.parse(localStorage.getItem("watchlist") || "[]");
+      const storedWatchlist = localStorage.getItem("watchlist");
+      if (storedWatchlist) {
+        setWatchlist(JSON.parse(storedWatchlist));
+      }
     } catch (error) {
       console.error("Error reading watchlist from localStorage:", error);
-      return [];
     }
-  });
+  }, []);
 
-  // Debounce localStorage updates for performance optimization
+  // Persist watchlist to localStorage
   useEffect(() => {
-    const debounceTimeout = setTimeout(() => {
-      try {
-        localStorage.setItem("watchlist", JSON.stringify(watchlist));
-      } catch (error) {
-        console.error("Error saving watchlist to localStorage:", error);
-      }
-    }, 300);
-
-    return () => clearTimeout(debounceTimeout);
+    try {
+      localStorage.setItem("watchlist", JSON.stringify(watchlist));
+    } catch (error) {
+      console.error("Error saving watchlist to localStorage:", error);
+    }
   }, [watchlist]);
 
   const [state, dispatch] = useReducer(cartReducer, initialState);
@@ -77,18 +85,22 @@ const MovieProvider: React.FC<{ children: React.ReactNode }> = ({
   const filteredMovies = useMemo(() => {
     let filtered = movies;
 
-    if (searchTerm) {
+    // Precompute lowercase values for filtering
+    const searchLower = searchTerm.toLowerCase();
+    const genreLower = selectedGenre.toLowerCase();
+
+    if (searchLower) {
       filtered = filtered.filter(
         (movie) =>
-          movie.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          movie.genre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          movie.title.toLowerCase().includes(searchLower) ||
+          movie.genre.toLowerCase().includes(searchLower) ||
           movie.rating.toString().includes(searchTerm)
       );
     }
 
-    if (selectedGenre) {
+    if (genreLower) {
       filtered = filtered.filter((movie) =>
-        movie.genre.toLowerCase().includes(selectedGenre.toLowerCase())
+        movie.genre.toLowerCase().includes(genreLower)
       );
     }
 
@@ -104,18 +116,24 @@ const MovieProvider: React.FC<{ children: React.ReactNode }> = ({
     });
   }, [searchTerm, movies, sortCriteria, selectedGenre]);
 
+  // Memoized state setters to avoid unnecessary re-renders
+  const memoizedSetSearchTerm = useCallback(setSearchTerm, []);
+  const memoizedSetSortCriteria = useCallback(setSortCriteria, []);
+  const memoizedSetSelectedGenre = useCallback(setSelectedGenre, []);
+  const memoizedSetWatchlist = useCallback(setWatchlist, []);
+
   return (
     <MovieContext.Provider
       value={{
         filteredMovies,
-        setSearchTerm,
+        setSearchTerm: memoizedSetSearchTerm,
         state,
         dispatch,
         watchlist,
-        setWatchlist,
-        setSortCriteria,
+        setWatchlist: memoizedSetWatchlist,
+        setSortCriteria: memoizedSetSortCriteria,
         selectedGenre,
-        setSelectedGenre,
+        setSelectedGenre: memoizedSetSelectedGenre,
       }}
     >
       {children}
@@ -129,7 +147,7 @@ interface ThemeContextType {
 }
 
 const ThemeContext = createContext<ThemeContextType>({
-  darkMode: true,
+  darkMode: localStorage.getItem("darkMode") === "true",
   setDarkMode: () => {},
 });
 
