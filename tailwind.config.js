@@ -12,7 +12,14 @@ export default {
         primary: "#00D991",
         secondary: "#FF7A00",
         accent: "#FF4081",
-        background: "#F8F9FA",
+        background: {
+          DEFAULT: "#F8F9FA",
+          dark: "#1A1A1A",
+        },
+        text: {
+          DEFAULT: "#212529",
+          dark: "#E9ECEF",
+        },
       },
     },
   },
