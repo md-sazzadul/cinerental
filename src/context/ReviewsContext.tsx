@@ -1,7 +1,7 @@
-import { createContext, ReactNode, useEffect, useState } from "react";
+import { createContext, ReactNode, useEffect, useRef, useState } from "react";
 
 interface Review {
-  rating: Number;
+  rating: number; // Numeric type for ratings
   date: string;
   text: string;
 }
@@ -23,15 +23,42 @@ interface ReviewProviderProps {
 
 const ReviewsProvider = ({ children }: ReviewProviderProps) => {
   const [reviews, setReviews] = useState<ReviewsState>(() => {
-    const storedReviews = localStorage.getItem("reviews");
-    return storedReviews ? (JSON.parse(storedReviews) as ReviewsState) : {};
+    try {
+      const storedReviews = localStorage.getItem("reviews");
+      return storedReviews ? (JSON.parse(storedReviews) as ReviewsState) : {};
+    } catch (error) {
+      console.error("Error parsing reviews from localStorage:", error);
+      return {};
+    }
   });
 
+  // Debounce logic using useRef
+  const saveTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
   useEffect(() => {
-    localStorage.setItem("reviews", JSON.stringify(reviews));
+    if (saveTimeout.current) {
+      clearTimeout(saveTimeout.current);
+    }
+    saveTimeout.current = setTimeout(() => {
+      try {
+        localStorage.setItem("reviews", JSON.stringify(reviews));
+      } catch (error) {
+        console.error("Error saving reviews to localStorage:", error);
+      }
+    }, 500); // Debounce duration
   }, [reviews]);
 
   const addReview = (movieId: string, review: Review) => {
+    // Validation: Ensure rating is between 1 and 5, and text is non-empty
+    if (review.rating < 1 || review.rating > 5) {
+      console.error("Rating must be between 1 and 5.");
+      return;
+    }
+    if (!review.text.trim()) {
+      console.error("Review text cannot be empty.");
+      return;
+    }
+
     setReviews((prevReviews) => {
       const newReviews = { ...prevReviews };
       if (!newReviews[movieId]) {
