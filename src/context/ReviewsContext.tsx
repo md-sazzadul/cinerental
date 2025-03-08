@@ -1,7 +1,14 @@
-import { createContext, ReactNode, useEffect, useRef, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 interface Review {
-  rating: number; // Numeric type for ratings
+  rating: number;
   date: string;
   text: string;
 }
@@ -22,18 +29,22 @@ interface ReviewProviderProps {
 }
 
 const ReviewsProvider = ({ children }: ReviewProviderProps) => {
-  const [reviews, setReviews] = useState<ReviewsState>(() => {
-    try {
-      const storedReviews = localStorage.getItem("reviews");
-      return storedReviews ? (JSON.parse(storedReviews) as ReviewsState) : {};
-    } catch (error) {
-      console.error("Error parsing reviews from localStorage:", error);
-      return {};
-    }
-  });
+  const [reviews, setReviews] = useState<ReviewsState>({});
 
   // Debounce logic using useRef
   const saveTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Load reviews from localStorage on mount
+  useEffect(() => {
+    try {
+      const storedReviews = localStorage.getItem("reviews");
+      if (storedReviews) {
+        setReviews(JSON.parse(storedReviews) as ReviewsState);
+      }
+    } catch (error) {
+      console.error("Error loading reviews from localStorage:", error);
+    }
+  }, []);
 
   useEffect(() => {
     if (saveTimeout.current) {
@@ -46,9 +57,15 @@ const ReviewsProvider = ({ children }: ReviewProviderProps) => {
         console.error("Error saving reviews to localStorage:", error);
       }
     }, 500); // Debounce duration
+
+    return () => {
+      if (saveTimeout.current) {
+        clearTimeout(saveTimeout.current);
+      }
+    };
   }, [reviews]);
 
-  const addReview = (movieId: string, review: Review) => {
+  const addReview = useCallback((movieId: string, review: Review) => {
     // Validation: Ensure rating is between 1 and 5, and text is non-empty
     if (review.rating < 1 || review.rating > 5) {
       console.error("Rating must be between 1 and 5.");
@@ -61,13 +78,25 @@ const ReviewsProvider = ({ children }: ReviewProviderProps) => {
 
     setReviews((prevReviews) => {
       const newReviews = { ...prevReviews };
+
+      // Initialize if movie doesn't have reviews yet
       if (!newReviews[movieId]) {
         newReviews[movieId] = [];
       }
+
+      // Prevent duplicate reviews (e.g., same text on the same date)
+      const isDuplicate = newReviews[movieId].some(
+        (r) => r.text === review.text && r.date === review.date
+      );
+      if (isDuplicate) {
+        console.warn("Duplicate review detected. Ignoring submission.");
+        return prevReviews;
+      }
+
       newReviews[movieId].push(review);
       return newReviews;
     });
-  };
+  }, []);
 
   return (
     <ReviewsContext.Provider value={{ reviews, addReview }}>
