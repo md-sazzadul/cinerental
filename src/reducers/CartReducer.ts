@@ -1,3 +1,9 @@
+// Define enum for action types
+enum CartActionType {
+  ADD_TO_CART = "ADD_TO_CART",
+  REMOVE_FROM_CART = "REMOVE_FROM_CART",
+}
+
 interface Movie {
   id: number;
   title: string;
@@ -11,8 +17,8 @@ interface CartState {
 }
 
 type CartAction =
-  | { type: "ADD_TO_CART"; payload: Movie }
-  | { type: "REMOVE_FROM_CART"; payload: { id: number } };
+  | { type: CartActionType.ADD_TO_CART; payload: Movie }
+  | { type: CartActionType.REMOVE_FROM_CART; payload: { id: number } };
 
 const initialState: CartState = {
   cartData: [],
@@ -20,22 +26,26 @@ const initialState: CartState = {
 
 const cartReducer = (state: CartState, action: CartAction): CartState => {
   switch (action.type) {
-    case "ADD_TO_CART":
+    case CartActionType.ADD_TO_CART:
+      // Prevent duplicate items in cart
+      if (state.cartData.find((item) => item.id === action.payload.id)) {
+        console.warn("Item is already in the cart!");
+        return state;
+      }
       return {
         cartData: [...state.cartData, action.payload],
       };
 
-    case "REMOVE_FROM_CART":
+    case CartActionType.REMOVE_FROM_CART:
       return {
-        ...state,
         cartData: state.cartData.filter(
           (item) => item.id !== action.payload.id
         ),
       };
 
     default:
-      return state;
+      throw new Error(`Unhandled action type: ${action.type}`);
   }
 };
 
-export { cartReducer, initialState };
+export { CartActionType, cartReducer, initialState };

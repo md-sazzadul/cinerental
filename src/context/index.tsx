@@ -1,6 +1,10 @@
 import { createContext, useEffect, useMemo, useReducer, useState } from "react";
 import { getAllMovies } from "../data/movies";
-import { cartReducer, initialState } from "../reducers/CartReducer";
+import {
+  CartActionType,
+  cartReducer,
+  initialState,
+} from "../reducers/CartReducer";
 
 interface Movie {
   id: number;
@@ -14,7 +18,7 @@ interface MovieContextType {
   filteredMovies: Movie[];
   setSearchTerm: (term: string) => void;
   state: typeof initialState;
-  dispatch: React.Dispatch<CartAction>;
+  dispatch: React.Dispatch<CartActionType>;
   watchlist: Movie[];
   setWatchlist: React.Dispatch<React.setStateAction<Movie[]>>;
   setSortCriteria: (criteria: string) => void;
