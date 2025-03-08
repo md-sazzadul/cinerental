@@ -1,3 +1,9 @@
+interface Review {
+  userId: string;
+  rating: number;
+  text: string;
+}
+
 interface Movie {
   id: string;
   cover: string;
@@ -6,7 +12,8 @@ interface Movie {
   genre: string;
   rating: number;
   price: number;
-  reviews: string[];
+  discount?: number;
+  reviews: Review[];
 }
 
 const data: Movie[] = [
@@ -19,6 +26,7 @@ const data: Movie[] = [
     genre: "Comedy/Drama",
     rating: 5,
     price: 140,
+    discount: 10,
     reviews: [],
   },
   {
@@ -41,6 +49,7 @@ const data: Movie[] = [
     genre: "Action/Comedy/Crime/Drama",
     rating: 4,
     price: 100,
+    discount: 5,
     reviews: [],
   },
   {
@@ -74,6 +83,7 @@ const data: Movie[] = [
     genre: "Adventure/Drama/Sci-Fi",
     rating: 5,
     price: 150,
+    discount: 15,
     reviews: [],
   },
   {
@@ -107,6 +117,7 @@ const data: Movie[] = [
     genre: "Crime/Drama/Thriller",
     rating: 4,
     price: 110,
+    discount: 10,
     reviews: [],
   },
   {
@@ -118,6 +129,7 @@ const data: Movie[] = [
     genre: "Action/Adventure/Drama",
     rating: 5,
     price: 200,
+    discount: 20,
     reviews: [],
   },
   {
@@ -140,6 +152,7 @@ const data: Movie[] = [
     genre: "Action/Adventure/Sci-Fi",
     rating: 4,
     price: 120,
+    discount: 10,
     reviews: [],
   },
   {
@@ -162,6 +175,7 @@ const data: Movie[] = [
     genre: "Animation/Adventure/Comedy",
     rating: 4,
     price: 90,
+    discount: 5,
     reviews: [],
   },
   {
@@ -188,8 +202,18 @@ const data: Movie[] = [
   },
 ];
 
-function getAllMovies(): Movie[] {
-  return data;
+// Function to calculate effective price after discount
+function getEffectivePrice(movie: Movie): number {
+  return movie.discount
+    ? movie.price * (1 - movie.discount / 100)
+    : movie.price;
 }
 
-export { getAllMovies, Movie };
+// Simulate an asynchronous API call
+async function getAllMovies(): Promise<Movie[]> {
+  return new Promise((resolve) => {
+    setTimeout(() => resolve(data), 500); // Simulates 500ms delay
+  });
+}
+
+export { getAllMovies, getEffectivePrice, Movie, Review };

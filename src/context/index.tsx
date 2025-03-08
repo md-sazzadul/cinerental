@@ -62,12 +62,16 @@ const MovieProvider: React.FC<{ children: React.ReactNode }> = ({
 
   // Load all movies on initial render
   useEffect(() => {
-    try {
-      const allMovies = getAllMovies();
-      setMovies(allMovies);
-    } catch (error) {
-      console.error("Error fetching movies:", error);
-    }
+    const fetchMovies = async () => {
+      try {
+        const allMovies = await getAllMovies();
+        setMovies(allMovies);
+      } catch (error) {
+        console.error("Error fetching movies:", error);
+      }
+    };
+
+    fetchMovies();
   }, []);
 
   const filteredMovies = useMemo(() => {
