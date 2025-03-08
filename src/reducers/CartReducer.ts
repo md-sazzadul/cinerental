@@ -20,11 +20,22 @@ type CartAction =
   | { type: CartActionType.ADD_TO_CART; payload: Movie }
   | { type: CartActionType.REMOVE_FROM_CART; payload: { id: number } };
 
-const initialState: CartState = {
-  cartData: [],
+// Load initial state from localStorage
+const loadCartState = (): CartState => {
+  try {
+    const storedCart = localStorage.getItem("cartData");
+    return storedCart ? { cartData: JSON.parse(storedCart) } : { cartData: [] };
+  } catch (error) {
+    console.error("Error loading cart data from localStorage:", error);
+    return { cartData: [] };
+  }
 };
 
+const initialState: CartState = loadCartState();
+
 const cartReducer = (state: CartState, action: CartAction): CartState => {
+  let updatedCart: Movie[];
+
   switch (action.type) {
     case CartActionType.ADD_TO_CART:
       // Prevent duplicate items in cart
@@ -32,20 +43,30 @@ const cartReducer = (state: CartState, action: CartAction): CartState => {
         console.warn("Item is already in the cart!");
         return state;
       }
-      return {
-        cartData: [...state.cartData, action.payload],
-      };
+
+      updatedCart = [...state.cartData, action.payload];
+
+      break;
 
     case CartActionType.REMOVE_FROM_CART:
-      return {
-        cartData: state.cartData.filter(
-          (item) => item.id !== action.payload.id
-        ),
-      };
+      updatedCart = state.cartData.filter(
+        (item) => item.id !== action.payload.id
+      );
+      break;
 
     default:
-      throw new Error(`Unhandled action type: ${action.type}`);
+      console.error(`Unhandled action type: ${action.type}`);
+      return state;
   }
+
+  // Save updated cart to localStorage
+  try {
+    localStorage.setItem("cartData", JSON.stringify(updatedCart));
+  } catch (error) {
+    console.error("Error saving cart data to localStorage:", error);
+  }
+
+  return { cartData: updatedCart };
 };
 
 export { CartActionType, cartReducer, initialState };
