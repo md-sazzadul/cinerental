@@ -14,7 +14,7 @@ interface MovieContextType {
   filteredMovies: Movie[];
   setSearchTerm: (term: string) => void;
   state: typeof initialState;
-  dispatch: React.Dispatch<any>;
+  dispatch: React.Dispatch<CartAction>;
   watchlist: Movie[];
   setWatchlist: React.Dispatch<React.setStateAction<Movie[]>>;
   setSortCriteria: (criteria: string) => void;
@@ -33,18 +33,37 @@ const MovieProvider: React.FC<{ children: React.ReactNode }> = ({
   const [selectedGenre, setSelectedGenre] = useState<string>("");
 
   const [watchlist, setWatchlist] = useState<Movie[]>(() => {
-    return JSON.parse(localStorage.getItem("watchlist")) || [];
+    try {
+      return JSON.parse(localStorage.getItem("watchlist") || "[]");
+    } catch (error) {
+      console.error("Error reading watchlist from localStorage:", error);
+      return [];
+    }
   });
 
+  // Debounce localStorage updates for performance optimization
   useEffect(() => {
-    localStorage.setItem("watchlist", JSON.stringify(watchlist));
+    const debounceTimeout = setTimeout(() => {
+      try {
+        localStorage.setItem("watchlist", JSON.stringify(watchlist));
+      } catch (error) {
+        console.error("Error saving watchlist to localStorage:", error);
+      }
+    }, 300);
+
+    return () => clearTimeout(debounceTimeout);
   }, [watchlist]);
 
   const [state, dispatch] = useReducer(cartReducer, initialState);
 
+  // Load all movies on initial render
   useEffect(() => {
-    const allMovies = getAllMovies();
-    setMovies(allMovies);
+    try {
+      const allMovies = getAllMovies();
+      setMovies(allMovies);
+    } catch (error) {
+      console.error("Error fetching movies:", error);
+    }
   }, []);
 
   const filteredMovies = useMemo(() => {
