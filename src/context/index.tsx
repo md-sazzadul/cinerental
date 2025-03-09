@@ -131,6 +131,7 @@ const MovieProvider: React.FC<{ children: React.ReactNode }> = ({
         dispatch,
         watchlist,
         setWatchlist: memoizedSetWatchlist,
+        sortCriteria,
         setSortCriteria: memoizedSetSortCriteria,
         selectedGenre,
         setSelectedGenre: memoizedSetSelectedGenre,

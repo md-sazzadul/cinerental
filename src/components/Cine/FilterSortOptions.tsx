@@ -1,8 +1,11 @@
 import { ChangeEvent, useContext } from "react";
 import { MovieContext } from "../../context";
 
+const genres = ["Comedy", "Drama", "Action", "Adventure", "Sci-Fi"]; // Dynamic genre list
+
 const FilterSortOptions: React.FC = () => {
-  const { setSortCriteria, setSelectedGenre } = useContext(MovieContext);
+  const { sortCriteria, setSortCriteria, selectedGenre, setSelectedGenre } =
+    useContext(MovieContext);
 
   const handleSortChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setSortCriteria(event.target.value);
@@ -20,8 +23,10 @@ const FilterSortOptions: React.FC = () => {
         </label>
         <select
           id="sort"
+          value={sortCriteria}
           onChange={handleSortChange}
           className="p-2 border border-gray-300 rounded bg-white dark:bg-[#171923] text-black dark:text-white"
+          aria-label="Sort movies"
         >
           <option value="title">Title</option>
           <option value="price">Price</option>
@@ -35,15 +40,16 @@ const FilterSortOptions: React.FC = () => {
         </label>
         <select
           id="genre"
+          value={selectedGenre}
           onChange={handleGenreChange}
           className="p-2 border border-gray-300 rounded bg-white dark:bg-[#171923] text-black dark:text-white"
         >
           <option value="">All</option>
-          <option value="comedy">Comedy</option>
-          <option value="drama">Drama</option>
-          <option value="action">Action</option>
-          <option value="adventure">Adventure</option>
-          <option value="sci-fi">Sci-fi</option>
+          {genres.map((genre) => (
+            <option key={genre.toLowerCase()} value={genre.toLowerCase()}>
+              {genre}
+            </option>
+          ))}
         </select>
       </div>
     </div>
