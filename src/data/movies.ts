@@ -16,7 +16,7 @@ interface Movie {
   reviews: Review[];
 }
 
-const data: Movie[] = [
+const moviesData: Movie[] = [
   {
     id: crypto.randomUUID(),
     cover: "once-in-ho.jpg",
@@ -204,16 +204,50 @@ const data: Movie[] = [
 
 // Function to calculate effective price after discount
 function getEffectivePrice(movie: Movie): number {
-  return movie.discount
-    ? movie.price * (1 - movie.discount / 100)
-    : movie.price;
+  if (!movie.discount || movie.discount <= 0) return movie.price;
+  return Math.max(movie.price * (1 - movie.discount / 100), 0); // Prevent negative prices
+}
+
+// Store movies in localStorage (if not already stored)
+function saveMoviesToLocalStorage() {
+  if (!localStorage.getItem("moviesData")) {
+    try {
+      localStorage.setItem("moviesData", JSON.stringify(moviesData));
+    } catch (error) {
+      console.error("Error saving movies to localStorage:", error);
+    }
+  }
+}
+
+// Retrieve movies from localStorage (fallback to default data)
+function loadMoviesFromLocalStorage(): Movie[] {
+  try {
+    const storedMovies = localStorage.getItem("moviesData");
+    return storedMovies ? JSON.parse(storedMovies) : moviesData;
+  } catch (error) {
+    console.error("Error loading movies from localStorage:", error);
+    return moviesData;
+  }
 }
 
 // Simulate an asynchronous API call
 async function getAllMovies(): Promise<Movie[]> {
   return new Promise((resolve) => {
-    setTimeout(() => resolve(data), 500); // Simulates 500ms delay
+    setTimeout(() => resolve(loadMoviesFromLocalStorage()), 500); // Simulates 500ms delay
   });
 }
 
-export { getAllMovies, getEffectivePrice, Movie, Review };
+// Fetch a single movie by ID
+async function getMovieById(movieId: string): Promise<Movie | null> {
+  return new Promise((resolve) => {
+    setTimeout(() => {
+      const movie = loadMoviesFromLocalStorage().find((m) => m.id === movieId);
+      resolve(movie || null);
+    }, 300); // Simulated delay for fetching a single movie
+  });
+}
+
+// Initialize movies in localStorage
+saveMoviesToLocalStorage();
+
+export { getAllMovies, getEffectivePrice, getMovieById, Movie, Review };
