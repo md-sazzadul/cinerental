@@ -1,17 +1,7 @@
 import { useContext } from "react";
 import { MovieContext } from "../../context";
+import { Movie } from "../../data/movies";
 import MovieCard from "./MovieCard";
-
-interface Movie {
-  id: string;
-  cover: string;
-  title: string;
-  description: string;
-  genre: string;
-  rating: number;
-  price: number;
-  reviews: string[];
-}
 
 const MovieList: React.FC = () => {
   const { filteredMovies } = useContext(MovieContext);

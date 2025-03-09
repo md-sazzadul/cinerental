@@ -1,20 +1,10 @@
-import { useContext, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { toast } from "react-toastify";
 import { MovieContext } from "../../context";
+import { Movie } from "../../data/movies";
 import { getImgUrl } from "../../utils/cine-utility";
 import MovieDetailsModal from "./MovieDetailsModal";
 import Rating from "./Rating";
-
-interface Movie {
-  id: string;
-  cover: string;
-  title: string;
-  description: string;
-  genre: string;
-  rating: number;
-  price: number;
-  reviews: string[];
-}
 
 interface MovieCardProps {
   movie: Movie;
@@ -26,62 +16,69 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
 
   const { state, dispatch, watchlist, setWatchlist } = useContext(MovieContext);
 
-  const handleModalClose = () => {
+  // Close the modal
+  const handleModalClose = useCallback(() => {
     setSelectedMovie(null);
     setShowModal(false);
-  };
+  }, []);
 
-  const handleMovieSelection = (movie: Movie) => {
+  // Handle movie selection for modal display
+  const handleMovieSelection = useCallback((movie: Movie) => {
     setSelectedMovie(movie);
     setShowModal(true);
-  };
+  }, []);
 
-  const handleAddToCart = (
-    event: React.MouseEvent<HTMLButtonElement>,
-    movie: Movie
-  ) => {
-    event.stopPropagation();
+  // Handle adding movie to the cart
+  const handleAddToCart = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>, movie: Movie) => {
+      event.stopPropagation();
 
-    const found = state.cartData.find((item: Movie) => item.id === movie.id);
+      const found = state.cartData.find((item: Movie) => item.id === movie.id);
 
-    if (!found) {
-      dispatch({
-        type: "ADD_TO_CART",
-        payload: {
-          ...movie,
-        },
-      });
+      if (!found) {
+        dispatch({
+          type: "ADD_TO_CART",
+          payload: {
+            ...movie,
+          },
+        });
 
-      toast.success(`Movie ${movie.title} added successfully`, {
-        position: "bottom-right",
-      });
-    } else {
-      toast.error(`Movie ${movie.title} has been added to the cart already!`, {
-        position: "bottom-right",
-      });
-    }
-  };
+        toast.success(`Movie ${movie.title} added successfully`, {
+          position: "bottom-right",
+        });
+      } else {
+        toast.error(
+          `Movie ${movie.title} has already been added to the cart!`,
+          {
+            position: "bottom-right",
+          }
+        );
+      }
+    },
+    [state.cartData, dispatch]
+  );
 
-  const handleAddToWatchlist = (
-    event: React.MouseEvent<HTMLButtonElement>,
-    movie: Movie
-  ) => {
-    event.stopPropagation();
+  // Handle adding movie to the watchlist
+  const handleAddToWatchlist = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>, movie: Movie) => {
+      event.stopPropagation();
 
-    const found = watchlist.find((item: Movie) => item.id === movie.id);
+      const found = watchlist.find((item: Movie) => item.id === movie.id);
 
-    if (!found) {
-      setWatchlist((prevWatchlist: Movie[]) => [...prevWatchlist, movie]);
+      if (!found) {
+        setWatchlist((prevWatchlist: Movie[]) => [...prevWatchlist, movie]);
 
-      toast.success(`Movie ${movie.title} added to watchlist`, {
-        position: "bottom-right",
-      });
-    } else {
-      toast.error(`Movie ${movie.title} is already in the watchlist!`, {
-        position: "bottom-right",
-      });
-    }
-  };
+        toast.success(`Movie ${movie.title} added to watchlist`, {
+          position: "bottom-right",
+        });
+      } else {
+        toast.error(`Movie ${movie.title} is already in the watchlist!`, {
+          position: "bottom-right",
+        });
+      }
+    },
+    [watchlist, setWatchlist]
+  );
 
   return (
     <>
@@ -96,9 +93,10 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
         key={movie.id}
         tabIndex={0}
         role="button"
+        aria-label={`Select ${movie.title}`}
         className="p-4 border border-black/10 shadow-sm dark:border-white/10 rounded-xl bg-white dark:bg-[#171923] cursor-pointer transition-transform hover:scale-105"
-        onClick={handleMovieSelection}
-        onKeyDown={(e) => e.key === "Enter" && handleMovieSelection()}
+        onClick={() => handleMovieSelection(movie)}
+        onKeyDown={(e) => e.key === "Enter" && handleMovieSelection(movie)}
       >
         <img
           className="w-full object-cover rounded-lg"
