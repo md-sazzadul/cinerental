@@ -19,7 +19,7 @@ interface Movie {
 const moviesData: Movie[] = [
   {
     id: crypto.randomUUID(),
-    cover: "once-in-ho.jpg",
+    cover: "once-in-ho.png",
     title: "Once Upon a Time... in Hollywood",
     description:
       "A faded television actor and his stunt double strive to achieve fame and success in the film industry during the final years of Hollywood's Golden Age in 1969 Los Angeles.",
@@ -31,7 +31,7 @@ const moviesData: Movie[] = [
   },
   {
     id: crypto.randomUUID(),
-    cover: "marriage-strory.jpg",
+    cover: "marriage-strory.png",
     title: "Marriage Story",
     description:
       "Noah Baumbach's incisive and compassionate look at a marriage breaking up and a family staying together.",
@@ -42,7 +42,7 @@ const moviesData: Movie[] = [
   },
   {
     id: crypto.randomUUID(),
-    cover: "pain-and-gain.jpg",
+    cover: "pain-and-gain.png",
     title: "Pain & Gain",
     description:
       "A trio of bodybuilders in Florida get caught up in an extortion ring and a kidnapping scheme that goes terribly wrong.",
@@ -54,7 +54,7 @@ const moviesData: Movie[] = [
   },
   {
     id: crypto.randomUUID(),
-    cover: "parasite.jpg",
+    cover: "parasite.png",
     title: "Parasite",
     description:
       "All unemployed, Ki-taek and his family take peculiar interest in the wealthy and glamorous Parks, as they ingratiate themselves into their lives and get entangled in an unexpected incident.",
@@ -76,7 +76,7 @@ const moviesData: Movie[] = [
   },
   {
     id: crypto.randomUUID(),
-    cover: "interstellar.jpg",
+    cover: "interstellar.png",
     title: "Interstellar",
     description:
       "A team of explorers travel through a wormhole in space in an attempt to ensure humanity's survival.",
@@ -88,7 +88,7 @@ const moviesData: Movie[] = [
   },
   {
     id: crypto.randomUUID(),
-    cover: "the-dark-knight.jpg",
+    cover: "the-dark-knight.png",
     title: "The Dark Knight",
     description:
       "When the menace known as the Joker emerges from his mysterious past, he wreaks havoc and chaos on the people of Gotham.",
@@ -99,7 +99,7 @@ const moviesData: Movie[] = [
   },
   {
     id: crypto.randomUUID(),
-    cover: "inception.jpg",
+    cover: "inception.png",
     title: "Inception",
     description:
       "A thief who steals corporate secrets through the use of dream-sharing technology is given the inverse task of planting an idea into the mind of a CEO.",
@@ -110,7 +110,7 @@ const moviesData: Movie[] = [
   },
   {
     id: crypto.randomUUID(),
-    cover: "joker.jpg",
+    cover: "joker.png",
     title: "Joker",
     description:
       "In Gotham's fractured society, Arthur Fleck, a man disregarded by society, embarks on a downward spiral of revolution and bloody crime.",
@@ -122,7 +122,7 @@ const moviesData: Movie[] = [
   },
   {
     id: crypto.randomUUID(),
-    cover: "avengers-endgame.jpg",
+    cover: "avengers-endgame.png",
     title: "Avengers: Endgame",
     description:
       "After the devastating events of Avengers: Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos' actions and restore balance to the universe.",
@@ -134,7 +134,7 @@ const moviesData: Movie[] = [
   },
   {
     id: crypto.randomUUID(),
-    cover: "ford-v-ferrari.jpg",
+    cover: "ford-v-ferrari.png",
     title: "Ford v Ferrari",
     description:
       "American car designer Carroll Shelby and driver Ken Miles battle corporate interference and the laws of physics to build a revolutionary race car for Ford in order to defeat Ferrari at the 24 Hours of Le Mans in 1966.",
@@ -145,7 +145,7 @@ const moviesData: Movie[] = [
   },
   {
     id: crypto.randomUUID(),
-    cover: "spider-man.jpg",
+    cover: "spider-man.png",
     title: "Spider-Man: Homecoming",
     description:
       "Peter Parker balances his life as an ordinary high school student in Queens with his superhero alter-ego Spider-Man, and finds himself on the trail of a new menace prowling the skies of New York City.",
@@ -157,7 +157,7 @@ const moviesData: Movie[] = [
   },
   {
     id: crypto.randomUUID(),
-    cover: "the-lion-king.jpg",
+    cover: "the-lion-king.png",
     title: "The Lion King",
     description:
       "After the murder of his father, a young lion prince flees his kingdom only to learn the true meaning of responsibility and bravery.",
@@ -168,7 +168,7 @@ const moviesData: Movie[] = [
   },
   {
     id: crypto.randomUUID(),
-    cover: "toy-story-4.jpg",
+    cover: "toy-story-4.png",
     title: "Toy Story 4",
     description:
       "When a new toy called 'Forky' joins Woody and the gang, a road trip alongside old and new friends reveals how big the world can be for a toy.",
@@ -180,7 +180,7 @@ const moviesData: Movie[] = [
   },
   {
     id: crypto.randomUUID(),
-    cover: "frozen-2.jpg",
+    cover: "frozen-2.png",
     title: "Frozen II",
     description:
       "Anna, Elsa, Kristoff, Olaf, and Sven leave Arendelle to travel to an ancient, autumn-bound forest of an enchanted land.",
@@ -191,7 +191,7 @@ const moviesData: Movie[] = [
   },
   {
     id: crypto.randomUUID(),
-    cover: "black-panther.jpg",
+    cover: "black-panther.png",
     title: "Black Panther",
     description:
       "T'Challa, heir to the hidden but advanced kingdom of Wakanda, must step forward to lead his people into a new future and must confront a challenger from his country's past.",

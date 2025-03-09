@@ -77,6 +77,8 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
     [watchlist, setWatchlist]
   );
 
+  console.log(getImgUrl(movie.cover));
+
   return (
     <>
       {showModal && selectedMovie && (
@@ -130,13 +132,6 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
             </button>
           </div>
         </figcaption>
-
-        {/* Movie Hover Overlay */}
-        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl">
-          <div className="flex justify-center items-center h-full">
-            <span className="text-white text-xl font-semibold">Quick View</span>
-          </div>
-        </div>
       </figure>
     </>
   );

@@ -1,6 +1,6 @@
 import React, { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter as Router } from "react-router-dom";
+import { HashRouter as Router } from "react-router-dom";
 
 import { ReviewsProvider } from "./context/ReviewsContext";
 import "./index.css";
@@ -11,13 +11,21 @@ const App = lazy(() => import("./App"));
 const rootElement = document.getElementById("root");
 
 if (!rootElement) {
-  console.error("Root element not found");
+  throw new Error(
+    "Root element #root not found. Ensure index.html contains <div id='root'></div>."
+  );
 } else {
   ReactDOM.createRoot(rootElement as HTMLElement).render(
     <React.StrictMode>
       <Router>
         <ReviewsProvider>
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense
+            fallback={
+              <div className="flex justify-center items-center h-screen text-lg">
+                Loading...
+              </div>
+            }
+          >
             <App />
           </Suspense>
         </ReviewsProvider>
