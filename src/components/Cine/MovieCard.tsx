@@ -16,19 +16,19 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
 
   const { state, dispatch, watchlist, setWatchlist } = useContext(MovieContext);
 
-  // Close the modal
+  // Close modal
   const handleModalClose = useCallback(() => {
     setSelectedMovie(null);
     setShowModal(false);
   }, []);
 
-  // Handle movie selection for modal display
+  // Handle movie selection for modal
   const handleMovieSelection = useCallback((movie: Movie) => {
     setSelectedMovie(movie);
     setShowModal(true);
   }, []);
 
-  // Handle adding movie to the cart
+  // Add movie to cart
   const handleAddToCart = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>, movie: Movie) => {
       event.stopPropagation();
@@ -47,18 +47,15 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
           position: "bottom-right",
         });
       } else {
-        toast.error(
-          `Movie ${movie.title} has already been added to the cart!`,
-          {
-            position: "bottom-right",
-          }
-        );
+        toast.error(`Movie ${movie.title} is already in the cart!`, {
+          position: "bottom-right",
+        });
       }
     },
     [state.cartData, dispatch]
   );
 
-  // Handle adding movie to the watchlist
+  // Add movie to watchlist
   const handleAddToWatchlist = useCallback(
     (event: React.MouseEvent<HTMLButtonElement>, movie: Movie) => {
       event.stopPropagation();
@@ -87,25 +84,30 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
           movie={selectedMovie}
           onClose={handleModalClose}
           onCartAdd={handleAddToCart}
-        ></MovieDetailsModal>
+        />
       )}
       <figure
         key={movie.id}
         tabIndex={0}
         role="button"
         aria-label={`Select ${movie.title}`}
-        className="p-4 border border-black/10 shadow-sm dark:border-white/10 rounded-xl bg-white dark:bg-[#171923] cursor-pointer transition-transform hover:scale-105"
+        className="relative p-4 border border-black/10 shadow-lg dark:border-white/10 rounded-xl bg-white dark:bg-[#171923] cursor-pointer transition-all transform hover:scale-105 hover:shadow-2xl group"
         onClick={() => handleMovieSelection(movie)}
         onKeyDown={(e) => e.key === "Enter" && handleMovieSelection(movie)}
       >
+        {/* Movie Image */}
         <img
-          className="w-full object-cover rounded-lg"
+          className="w-full object-cover rounded-lg transition-all transform group-hover:scale-105"
           src={getImgUrl(movie.cover)}
           alt={movie.title}
           loading="lazy"
         />
+
+        {/* Movie Details */}
         <figcaption className="pt-4 flex flex-col items-center text-center">
-          <h3 className="text-lg font-semibold mb-1">{movie.title}</h3>
+          <h3 className="text-lg font-semibold mb-1 text-black dark:text-white group-hover:text-primary transition-all">
+            {movie.title}
+          </h3>
           <p className="text-gray-500 text-sm mb-2">{movie.genre}</p>
           <div className="flex items-center justify-center space-x-1 mb-3">
             <Rating value={movie.rating} />
@@ -113,14 +115,14 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
 
           <div className="w-full flex flex-col space-y-2">
             <button
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-all"
+              className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-all"
               onClick={(e) => handleAddToCart(e, movie)}
             >
               <img src="/tag.svg" alt="tag" className="w-5 h-5" />
               <span>${movie.price} | Add to Cart</span>
             </button>
             <button
-              className="w-full bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-all"
+              className="w-full bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white font-semibold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-all"
               onClick={(e) => handleAddToWatchlist(e, movie)}
             >
               <img src="/heart.svg" alt="heart" className="w-5 h-5" />
@@ -128,6 +130,13 @@ const MovieCard: React.FC<MovieCardProps> = ({ movie }) => {
             </button>
           </div>
         </figcaption>
+
+        {/* Movie Hover Overlay */}
+        <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl">
+          <div className="flex justify-center items-center h-full">
+            <span className="text-white text-xl font-semibold">Quick View</span>
+          </div>
+        </div>
       </figure>
     </>
   );
