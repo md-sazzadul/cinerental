@@ -1,14 +1,16 @@
-import { useContext, useEffect, useState } from "react";
+import { Suspense, lazy, useContext, useEffect, useState } from "react";
 import { Route, Routes } from "react-router-dom";
 import { ThemeContext } from "../../context";
-import FilterSortOptions from "../Cine/FilterSortOptions";
-import MovieList from "../Cine/MovieList";
-import Watchlist from "../Cine/Watchlist";
 import ErrorBoundary from "../ErrorBoundary/ErrorBoundary";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import SearchBar from "../SearchBar/SearchBar";
 import Sidebar from "../Sidebar/Sidebar";
+
+// Lazy-loaded components for performance optimization
+const FilterSortOptions = lazy(() => import("../Cine/FilterSortOptions"));
+const MovieList = lazy(() => import("../Cine/MovieList"));
+const Watchlist = lazy(() => import("../Cine/Watchlist"));
 
 const Page: React.FC = () => {
   const { darkMode } = useContext(ThemeContext);
@@ -21,18 +23,39 @@ const Page: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-full">Loading...</div>
+      <div className="flex items-center justify-center h-screen">
+        <svg
+          className="w-10 h-10 animate-spin text-gray-600"
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+        >
+          <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+          />
+          <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8v8H4z"
+          />
+        </svg>
+      </div>
     );
   }
 
   return (
     <div className={`h-full ${darkMode ? "dark" : ""}`}>
       <Header />
-      <main>
-        <div className="container grid lg:grid-cols-[218px_1fr] gap-[3.5rem]">
-          <Sidebar />
-          <div>
-            <ErrorBoundary>
+      <main className="grid grid-cols-1 lg:grid-cols-[auto_1fr] gap-4 px-4">
+        <Sidebar />
+        <div>
+          <ErrorBoundary>
+            <Suspense fallback={<div className="text-center">Loading...</div>}>
               <Routes>
                 <Route
                   path="/"
@@ -46,8 +69,8 @@ const Page: React.FC = () => {
                 />
                 <Route path="/watchlist" element={<Watchlist />} />
               </Routes>
-            </ErrorBoundary>
-          </div>
+            </Suspense>
+          </ErrorBoundary>
         </div>
       </main>
       <Footer />
