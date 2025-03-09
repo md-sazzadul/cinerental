@@ -1,11 +1,4 @@
-import {
-  createContext,
-  useCallback,
-  useEffect,
-  useMemo,
-  useReducer,
-  useState,
-} from "react";
+import { createContext, useEffect, useMemo, useReducer, useState } from "react";
 import { getAllMovies } from "../data/movies";
 import {
   CartActionType,
@@ -27,7 +20,7 @@ interface MovieContextType {
   state: typeof initialState;
   dispatch: React.Dispatch<CartActionType>;
   watchlist: Movie[];
-  setWatchlist: React.Dispatch<React.setStateAction<Movie[]>>;
+  setWatchlist: React.Dispatch<React.SetStateAction<Movie[]>>;
   setSortCriteria: (criteria: string) => void;
   selectedGenre: string;
   setSelectedGenre: (genre: string) => void;
@@ -43,32 +36,31 @@ const MovieProvider: React.FC<{ children: React.ReactNode }> = ({
   const [sortCriteria, setSortCriteria] = useState<string>("title");
   const [selectedGenre, setSelectedGenre] = useState<string>("");
 
-  const [watchlist, setWatchlist] = useState<Movie[]>([]);
-
-  // Load watchlist from localStorage on mount
-  useEffect(() => {
+  const [watchlist, setWatchlist] = useState<Movie[]>(() => {
     try {
-      const storedWatchlist = localStorage.getItem("watchlist");
-      if (storedWatchlist) {
-        setWatchlist(JSON.parse(storedWatchlist));
-      }
+      return JSON.parse(localStorage.getItem("watchlist") || "[]");
     } catch (error) {
       console.error("Error reading watchlist from localStorage:", error);
+      return [];
     }
-  }, []);
-
-  // Persist watchlist to localStorage
-  useEffect(() => {
-    try {
-      localStorage.setItem("watchlist", JSON.stringify(watchlist));
-    } catch (error) {
-      console.error("Error saving watchlist to localStorage:", error);
-    }
-  }, [watchlist]);
+  });
 
   const [state, dispatch] = useReducer(cartReducer, initialState);
 
-  // Load all movies on initial render
+  // Persist watchlist to localStorage with debounce
+  useEffect(() => {
+    const debounceTimeout = setTimeout(() => {
+      try {
+        localStorage.setItem("watchlist", JSON.stringify(watchlist));
+      } catch (error) {
+        console.error("Error saving watchlist to localStorage:", error);
+      }
+    }, 500);
+
+    return () => clearTimeout(debounceTimeout);
+  }, [watchlist]);
+
+  // Load all movies on mount
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -85,7 +77,6 @@ const MovieProvider: React.FC<{ children: React.ReactNode }> = ({
   const filteredMovies = useMemo(() => {
     let filtered = movies;
 
-    // Precompute lowercase values for filtering
     const searchLower = searchTerm.toLowerCase();
     const genreLower = selectedGenre.toLowerCase();
 
@@ -116,25 +107,19 @@ const MovieProvider: React.FC<{ children: React.ReactNode }> = ({
     });
   }, [searchTerm, movies, sortCriteria, selectedGenre]);
 
-  // Memoized state setters to avoid unnecessary re-renders
-  const memoizedSetSearchTerm = useCallback(setSearchTerm, []);
-  const memoizedSetSortCriteria = useCallback(setSortCriteria, []);
-  const memoizedSetSelectedGenre = useCallback(setSelectedGenre, []);
-  const memoizedSetWatchlist = useCallback(setWatchlist, []);
-
   return (
     <MovieContext.Provider
       value={{
         filteredMovies,
-        setSearchTerm: memoizedSetSearchTerm,
+        setSearchTerm,
         state,
         dispatch,
         watchlist,
-        setWatchlist: memoizedSetWatchlist,
+        setWatchlist,
         sortCriteria,
-        setSortCriteria: memoizedSetSortCriteria,
+        setSortCriteria,
         selectedGenre,
-        setSelectedGenre: memoizedSetSelectedGenre,
+        setSelectedGenre,
       }}
     >
       {children}
@@ -147,8 +132,20 @@ interface ThemeContextType {
   setDarkMode: (mode: boolean) => void;
 }
 
+// Ensuring safe access to `localStorage` for SSR
+const getInitialDarkMode = () => {
+  if (typeof window !== "undefined") {
+    try {
+      return JSON.parse(localStorage.getItem("darkMode") || "false");
+    } catch (error) {
+      console.error("Error reading dark mode preference:", error);
+    }
+  }
+  return false;
+};
+
 const ThemeContext = createContext<ThemeContextType>({
-  darkMode: localStorage.getItem("darkMode") === "true",
+  darkMode: getInitialDarkMode(),
   setDarkMode: () => {},
 });
 
