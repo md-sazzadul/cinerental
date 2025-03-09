@@ -16,9 +16,10 @@ const Page: React.FC = () => {
   const { darkMode } = useContext(ThemeContext);
   const [loading, setLoading] = useState(true);
 
+  // Simulated loading delay (can be removed or modified as per real use case)
   useEffect(() => {
-    const timer = setTimeout(() => setLoading(false), 500); // Simulated delay
-    return () => clearTimeout(timer);
+    const timer = setTimeout(() => setLoading(false), 500);
+    return () => clearTimeout(timer); // Cleanup on unmount
   }, []);
 
   if (loading) {
@@ -55,7 +56,9 @@ const Page: React.FC = () => {
         <Sidebar />
         <div>
           <ErrorBoundary>
-            <Suspense fallback={<div className="text-center">Loading...</div>}>
+            <Suspense
+              fallback={<div className="text-center text-xl">Loading...</div>}
+            >
               <Routes>
                 <Route
                   path="/"
