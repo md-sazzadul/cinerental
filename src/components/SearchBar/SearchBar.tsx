@@ -1,4 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  KeyboardEvent,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import { MovieContext } from "../../context";
 
 const SearchBar: React.FC = () => {
@@ -7,7 +13,7 @@ const SearchBar: React.FC = () => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setSearchTerm(inputValue);
+      setSearchTerm(inputValue.trim());
     }, 300);
 
     return () => clearTimeout(timer);
@@ -22,6 +28,12 @@ const SearchBar: React.FC = () => {
     setSearchTerm("");
   };
 
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Escape") {
+      handleClearSearch();
+    }
+  };
+
   return (
     <div className="my-4 flex items-center">
       <input
@@ -30,11 +42,14 @@ const SearchBar: React.FC = () => {
         className="w-full p-2 border border-gray-300 rounded bg-white dark:bg-[#171923] text-black dark:text-white"
         value={inputValue}
         onChange={handleInputChange}
+        onKeyDown={handleKeyDown}
+        aria-label="Search movies"
       />
       {inputValue && (
         <button
           onClick={handleClearSearch}
           className="ml-2 bg-gray-200 dark:bg-gray-700 p-2 rounded text-sm"
+          aria-label="Clear search"
         >
           ✖
         </button>
