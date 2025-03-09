@@ -26,11 +26,13 @@ const CartItem: React.FC<{ item: Movie; onRemove: (item: Movie) => void }> = ({
           <span className="max-md:text-xs">
             {item.discount ? (
               <>
-                <span className="line-through text-red-500">${item.price}</span>{" "}
+                <span className="line-through text-red-500">
+                  ${item.price.toFixed(2)}
+                </span>{" "}
                 <span className="text-green-500">${finalPrice.toFixed(2)}</span>
               </>
             ) : (
-              `$${item.price}`
+              `$${item.price.toFixed(2)}`
             )}
           </span>
         </div>

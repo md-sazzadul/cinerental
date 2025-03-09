@@ -28,6 +28,13 @@ const CartDetails: React.FC<CartDetailsProps> = ({ onClose }) => {
     // Implement checkout logic here
   }
 
+  const totalPrice = state.cartData.reduce((total: number, item: Movie) => {
+    const finalPrice = item.discount
+      ? (item.price * (100 - item.discount)) / 100
+      : item.price;
+    return total + finalPrice;
+  }, 0);
+
   return (
     <div className="fixed top-0 left-0 w-screen h-screen z-50 bg-black/60 backdrop-blur-sm">
       <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[420px] sm:max-w-[600px] lg:max-w-[790px] p-4 max-h-[90vh] overflow-auto">
@@ -46,7 +53,18 @@ const CartDetails: React.FC<CartDetailsProps> = ({ onClose }) => {
               ))
             )}
           </div>
-          <div className="flex items-center justify-end gap-2">
+
+          {/* Total Price Section */}
+          {state.cartData.length > 0 && (
+            <div className="flex justify-between items-center border-t pt-4">
+              <span className="text-lg font-semibold">Total Price:</span>
+              <span className="text-xl font-bold text-green-500">
+                ${totalPrice.toFixed(2)}
+              </span>
+            </div>
+          )}
+
+          <div className="flex items-center justify-end gap-2 mt-4">
             <button
               className="rounded-md p-2 md:px-4 inline-flex items-center space-x-2 bg-primary text-[#171923] text-sm"
               onClick={handleCheckout}
