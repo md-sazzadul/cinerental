@@ -1,9 +1,9 @@
 import { useContext } from "react";
 import { toast } from "react-toastify";
-import Delete from "../../assets/delete.svg";
-import checkout from "../../assets/icons/checkout.svg";
+import CheckoutIcon from "../../assets/icons/checkout.svg";
 import { MovieContext } from "../../context";
-import { getImgUrl } from "../../utils/cine-utility";
+import { Movie } from "../../data/movies";
+import CartItem from "./CartItem";
 
 interface CartDetailsProps {
   onClose: () => void;
@@ -12,7 +12,7 @@ interface CartDetailsProps {
 const CartDetails: React.FC<CartDetailsProps> = ({ onClose }) => {
   const { state, dispatch } = useContext(MovieContext);
 
-  function handleDeleteCart(item: any) {
+  function handleDeleteCart(item: Movie) {
     dispatch({
       type: "REMOVE_FROM_CART",
       payload: item,
@@ -21,6 +21,11 @@ const CartDetails: React.FC<CartDetailsProps> = ({ onClose }) => {
     toast.success(`Removed ${item.title} from the cart`, {
       position: "bottom-right",
     });
+  }
+
+  function handleCheckout() {
+    toast.info("Proceeding to checkout...", { position: "bottom-right" });
+    // Implement checkout logic here
   }
 
   return (
@@ -32,50 +37,28 @@ const CartDetails: React.FC<CartDetailsProps> = ({ onClose }) => {
             {state.cartData.length === 0 ? (
               <p className="text-3xl">The Cart is Empty</p>
             ) : (
-              state.cartData.map((item: any) => (
-                <div key={item.id} className="grid grid-cols-[1fr_auto] gap-4">
-                  <div className="flex items-center gap-4">
-                    <img
-                      className="rounded overflow-hidden"
-                      src={getImgUrl(item.cover)}
-                      alt={item.title}
-                      width={50}
-                      height={50}
-                    />
-                    <div>
-                      <h3 className="text-base md:text-xl font-bold">
-                        {item.title}
-                      </h3>
-                      <p className="max-md:text-xs text-[#575A6E]">
-                        {item.genre}
-                      </p>
-                      <span className="max-md:text-xs">${item.price}</span>
-                    </div>
-                  </div>
-                  <div className="flex justify-between gap-4 items-center">
-                    <button
-                      className="bg-[#D42967] rounded-md p-2 md:px-4 inline-flex items-center space-x-2 text-white"
-                      onClick={() => handleDeleteCart(item)}
-                    >
-                      <img className="w-5 h-5" src={Delete} alt="Delete" />
-                      <span className="max-md:hidden">Remove</span>
-                    </button>
-                  </div>
-                </div>
+              state.cartData.map((item: Movie) => (
+                <CartItem
+                  key={item.id}
+                  item={item}
+                  onRemove={handleDeleteCart}
+                />
               ))
             )}
           </div>
           <div className="flex items-center justify-end gap-2">
             <button
               className="rounded-md p-2 md:px-4 inline-flex items-center space-x-2 bg-primary text-[#171923] text-sm"
-              href="#"
+              onClick={handleCheckout}
+              aria-label="Proceed to checkout"
             >
-              <img src={checkout} width={24} height={24} alt="Checkout" />
+              <img src={CheckoutIcon} width={24} height={24} alt="Checkout" />
               <span>Checkout</span>
             </button>
             <button
               className="border border-[#74766F] rounded-lg py-2 px-5 flex items-center justify-center gap-2 text-[#6F6F6F] dark:text-gray-200 font-semibold text-sm"
               onClick={onClose}
+              aria-label="Close cart"
             >
               Cancel
             </button>
