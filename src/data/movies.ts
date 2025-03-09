@@ -208,21 +208,21 @@ function getEffectivePrice(movie: Movie): number {
   return Math.max(movie.price * (1 - movie.discount / 100), 0); // Prevent negative prices
 }
 
-// Store movies in localStorage (if not already stored)
-function saveMoviesToLocalStorage() {
-  if (!localStorage.getItem("moviesData")) {
+// Store movies in sessionStorage (if not already stored)
+function saveMoviesToSessionStorage() {
+  if (!sessionStorage.getItem("moviesData")) {
     try {
-      localStorage.setItem("moviesData", JSON.stringify(moviesData));
+      sessionStorage.setItem("moviesData", JSON.stringify(moviesData));
     } catch (error) {
       console.error("Error saving movies to localStorage:", error);
     }
   }
 }
 
-// Retrieve movies from localStorage (fallback to default data)
-function loadMoviesFromLocalStorage(): Movie[] {
+// Retrieve movies from sessionStorage (fallback to default data)
+function loadMoviesFromSessionStorage(): Movie[] {
   try {
-    const storedMovies = localStorage.getItem("moviesData");
+    const storedMovies = sessionStorage.getItem("moviesData");
     return storedMovies ? JSON.parse(storedMovies) : moviesData;
   } catch (error) {
     console.error("Error loading movies from localStorage:", error);
@@ -233,7 +233,7 @@ function loadMoviesFromLocalStorage(): Movie[] {
 // Simulate an asynchronous API call
 async function getAllMovies(): Promise<Movie[]> {
   return new Promise((resolve) => {
-    setTimeout(() => resolve(loadMoviesFromLocalStorage()), 500); // Simulates 500ms delay
+    setTimeout(() => resolve(loadMoviesFromSessionStorage()), 500); // Simulates 500ms delay
   });
 }
 
@@ -241,13 +241,15 @@ async function getAllMovies(): Promise<Movie[]> {
 async function getMovieById(movieId: string): Promise<Movie | null> {
   return new Promise((resolve) => {
     setTimeout(() => {
-      const movie = loadMoviesFromLocalStorage().find((m) => m.id === movieId);
+      const movie = loadMoviesFromSessionStorage().find(
+        (m) => m.id === movieId
+      );
       resolve(movie || null);
     }, 300); // Simulated delay for fetching a single movie
   });
 }
 
 // Initialize movies in localStorage
-saveMoviesToLocalStorage();
+saveMoviesToSessionStorage();
 
 export { getAllMovies, getEffectivePrice, getMovieById, Movie, Review };
