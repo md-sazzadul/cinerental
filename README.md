@@ -10,3 +10,7 @@ Cinerental is a movie rental platform that allows users to browse, search, and r
 - **Dark Mode**: Toggle dark mode for a better viewing experience.
 - **Reviews**: Read and submit reviews for movies.
 - **Responsive Design**: Works well on different screen sizes.
+
+## Demo
+
+You can view a live demo of the application [here](https://your-demo-link.com).
