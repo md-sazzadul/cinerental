@@ -13,7 +13,7 @@ Cinerental is a movie rental platform that allows users to browse, search, and r
 
 ## Demo
 
-You can view a live demo of the application [here](https://your-demo-link.com).
+You can view a live demo of the application [here](https://cinerental-sazzad15.netlify.app/).
 
 ## Technologies Used
 
