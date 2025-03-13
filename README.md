@@ -14,3 +14,12 @@ Cinerental is a movie rental platform that allows users to browse, search, and r
 ## Demo
 
 You can view a live demo of the application [here](https://your-demo-link.com).
+
+## Technologies Used
+
+- **React**: JavaScript library for building user interfaces.
+- **Vite**: Next-generation frontend tooling.
+- **Tailwind CSS**: Utility-first CSS framework.
+- **React Router**: Declarative routing for React.
+- **React Toastify**: Notifications for React.
+- **ESLint**: Pluggable JavaScript linter.
