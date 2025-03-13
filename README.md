@@ -23,3 +23,12 @@ You can view a live demo of the application [here](https://your-demo-link.com).
 - **React Router**: Declarative routing for React.
 - **React Toastify**: Notifications for React.
 - **ESLint**: Pluggable JavaScript linter.
+
+## Future Enhancements
+
+- **User Authentication**: Implement user authentication and authorization.
+- **Payment Integration**: Integrate payment gateways for seamless transactions.
+- **Recommendations**: Add a recommendation system based on user preferences and viewing history.
+- **Admin Panel**: Develop an admin panel for managing movies, users, and reviews.
+- **Mobile App**: Create a mobile application for iOS and Android platforms.
+- **Multilingual Support**: Add support for multiple languages.
