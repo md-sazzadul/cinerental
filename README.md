@@ -32,3 +32,11 @@ You can view a live demo of the application [here](https://your-demo-link.com).
 - **Admin Panel**: Develop an admin panel for managing movies, users, and reviews.
 - **Mobile App**: Create a mobile application for iOS and Android platforms.
 - **Multilingual Support**: Add support for multiple languages.
+
+## Contact
+
+For any inquiries or feedback, please reach out to us via the following channels:
+
+- **Email**: [md.sazzadul.islam15@gmail.com](mailto:md.sazzadul.islam15@gmail.com)
+- **GitHub**: [md-sazzadul](https://github.com/md-sazzadul)
+- **LinkedIn**: [Md Sazzadul Islam](https://www.linkedin.com/in/md-sazzadul-islam15/)
